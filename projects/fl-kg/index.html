@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Fairness in federated knowledge-graph learning: how the partitioning of FB15k-237 across FedAvg clients changes TransE link-prediction quality and per-domain fairness. EURECOM semester project, Spring 2026." />
+  <meta name="author" content="Yasmine Gharsallah" />
+  <title>Federated KG Fairness · Yasmine Gharsallah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07070c;
+      --surface: #0f0f1a;
+      --surface-2: #151524;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #e9e9f3;
+      --text-dim: #a0a0b8;
+      --text-muted: #7a7a94;
+      --grid: #22222f;
+      --axis: #3a3a4a;
+      --accent: #8a5cff;
+      --accent-2: #00e5ff;
+      --gradient: linear-gradient(135deg, #8a5cff 0%, #00e5ff 50%, #ff4d9d 100%);
+      --radius: 18px;
+      --radius-sm: 10px;
+
+      /* chart series: one color per partitioning method, fixed order */
+      --s-louvain: #3987e5;
+      --s-domain: #d95926;
+      --s-overlap: #199e70;
+      --s-central: #c98500;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(138,92,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(138,92,255,0.045) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at top, black 30%, transparent 75%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    a { color: inherit; }
+    code, .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.88em; }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+    @media (max-width: 600px) { .wrap { padding: 0 16px; } }
+
+    /* top bar */
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(7, 7, 12, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+    .back { text-decoration: none; color: var(--text-dim); font-size: 0.95rem; display: inline-flex; gap: 8px; align-items: center; }
+    .back:hover { color: var(--text); }
+    .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-decoration: none; }
+    .logo span { background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    /* hero */
+    header.hero { padding: 64px 0 40px; }
+    .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-2); letter-spacing: 0.08em; text-transform: uppercase; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      line-height: 1.12;
+      margin: 14px 0 18px;
+      letter-spacing: -0.02em;
+    }
+    .lede { font-size: 1.15rem; color: var(--text-dim); max-width: 760px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 26px 0; color: var(--text-dim); font-size: 0.95rem; }
+    .meta b { color: var(--text); font-weight: 500; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+    .tags span {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+      padding: 5px 11px; border-radius: 999px;
+      border: 1px solid var(--border-strong); color: var(--text-dim);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 11px 20px; border-radius: 999px;
+      text-decoration: none; font-weight: 500; font-size: 0.95rem;
+      border: 1px solid var(--border-strong);
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .btn.primary { background: linear-gradient(135deg, #8a5cff, #5b6cff); border-color: transparent; color: #fff; }
+
+    /* sections */
+    section { padding: 44px 0; border-top: 1px solid var(--border); }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.45rem, 3vw, 1.85rem);
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+    h2 .num { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--accent); margin-right: 10px; vertical-align: middle; }
+    h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.08rem; margin-bottom: 6px; }
+    p { color: var(--text-dim); max-width: 780px; }
+    p + p { margin-top: 12px; }
+    p strong, li strong { color: var(--text); font-weight: 600; }
+
+    /* stat tiles */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
+    @media (max-width: 760px) { .stats { grid-template-columns: 1fr; } }
+    .stat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px;
+    }
+    .stat .v { font-family: 'Space Grotesk', sans-serif; font-size: 2.1rem; font-weight: 700; line-height: 1.1; }
+    .stat .v small { font-size: 1rem; color: var(--text-dim); font-weight: 500; }
+    .stat .l { color: var(--text-dim); font-size: 0.95rem; margin-top: 8px; }
+
+    /* strategy cards */
+    .strategies { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
+    @media (max-width: 900px) { .strategies { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .strategies { grid-template-columns: 1fr; } }
+    .strat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px;
+      border-top: 3px solid var(--c);
+    }
+    .strat svg { width: 100%; height: auto; margin-bottom: 10px; }
+    .strat p { font-size: 0.9rem; }
+
+    /* chart card */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px; margin-top: 22px;
+    }
+    @media (max-width: 600px) { .card { padding: 16px 12px; } }
+    .card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 20px; margin-bottom: 14px; }
+    .card-head p { font-size: 0.92rem; }
+    .seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px; gap: 2px; }
+    .seg button {
+      font: inherit; font-size: 0.85rem; color: var(--text-dim);
+      background: none; border: 0; border-radius: 999px;
+      padding: 5px 12px; cursor: pointer;
+    }
+    .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--border-strong); }
+    .seg button:focus-visible, .legend button:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 10px; }
+    .legend button, .legend span.item {
+      font: inherit; font-size: 0.88rem; color: var(--text-dim);
+      background: none; border: 0; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 7px; padding: 3px 2px;
+    }
+    .legend span.item { cursor: default; }
+    .legend i { width: 12px; height: 12px; border-radius: 3px; background: var(--c); display: inline-block; }
+    .legend button[aria-pressed="false"] { opacity: 0.4; }
+    .legend button[aria-pressed="false"] i { background: transparent; box-shadow: inset 0 0 0 2px var(--c); }
+
+    .chart { position: relative; width: 100%; }
+    .chart svg { width: 100%; height: auto; overflow: visible; }
+    .chart text { font-family: 'Outfit', system-ui, sans-serif; }
+    .tick { fill: var(--text-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    .cat { fill: var(--text-dim); font-size: 13px; }
+    .val { fill: var(--text); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+    .gridline { stroke: var(--grid); stroke-width: 1; }
+    .baseline { stroke: var(--axis); stroke-width: 1; }
+    .hit { fill: transparent; cursor: default; }
+    .row-hover { fill: rgba(255,255,255,0.035); opacity: 0; }
+    .hit:hover + .row-hover, .row-hover.on { opacity: 1; }
+
+    .tip {
+      position: absolute; pointer-events: none; z-index: 5;
+      background: #1b1b2b; border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm); padding: 10px 12px;
+      font-size: 0.85rem; min-width: 170px;
+      box-shadow: 0 12px 30px -10px rgba(0,0,0,0.6);
+      opacity: 0; transition: opacity 0.12s;
+    }
+    .tip.on { opacity: 1; }
+    .tip .t { font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .tip .r { display: flex; align-items: center; gap: 8px; color: var(--text-dim); }
+    .tip .r i { width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
+    .tip .r b { margin-left: auto; color: var(--text); font-weight: 500; font-variant-numeric: tabular-nums; padding-left: 14px; }
+
+    details { margin-top: 14px; }
+    summary { cursor: pointer; color: var(--text-muted); font-size: 0.88rem; }
+    summary:hover { color: var(--text-dim); }
+    .tablewrap { overflow-x: auto; margin-top: 10px; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+    th, td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+    th:first-child, td:first-child { text-align: left; }
+    th { color: var(--text-dim); font-weight: 500; }
+    td { color: var(--text); }
+
+    /* findings list */
+    .findings { list-style: none; counter-reset: f; display: grid; gap: 14px; margin-top: 18px; }
+    .findings li {
+      counter-increment: f; position: relative;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 20px 18px 62px;
+      color: var(--text-dim);
+    }
+    .findings li::before {
+      content: counter(f, decimal-leading-zero);
+      position: absolute; left: 20px; top: 18px;
+      font-family: 'JetBrains Mono', monospace; color: var(--accent-2); font-size: 0.9rem;
+    }
+
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+    @media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
+    .box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+    .box ul { padding-left: 18px; color: var(--text-dim); display: grid; gap: 6px; font-size: 0.95rem; }
+
+    .pipeline { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center; }
+    .pipeline .step {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 14px; font-size: 0.9rem;
+    }
+    .pipeline .step b { display: block; color: var(--text); font-weight: 600; }
+    .pipeline .step span { color: var(--text-muted); font-size: 0.82rem; }
+    .pipeline .arrow { color: var(--text-muted); }
+
+    footer { border-top: 1px solid var(--border); padding: 30px 0 50px; color: var(--text-muted); font-size: 0.9rem; }
+    footer .wrap { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; }
+    footer a { color: var(--text-dim); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .btn, .tip { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="topbar">
+    <div class="wrap">
+      <a class="back" href="../../index.html#projects"><i class="fa-solid fa-arrow-left"></i> Back to portfolio</a>
+      <a class="logo" href="../../index.html">Yasmine<span>.</span></a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study · EURECOM semester project</span>
+      <h1>Fairness in Federated Knowledge-Graph Learning</h1>
+      <p class="lede">When several organisations train one knowledge-graph model without sharing their data, how the graph is split between them matters a lot. We measured how much, on FB15k-237 with TransE and FedAvg, and found that the wrong split makes the model almost useless.</p>
+
+      <div class="meta">
+        <div><b>When</b> · Apr – Jun 2026</div>
+        <div><b>Team</b> · Yasmine Gharsallah, Mohamed Amine Trabelsi</div>
+        <div><b>Supervisors</b> · Melek Önen, Ferran Alborch, Ibtissam Harrouch</div>
+      </div>
+
+      <div class="tags">
+        <span>Python</span><span>PyTorch</span><span>NetworkX</span><span>FedAvg</span>
+        <span>TransE</span><span>Louvain</span><span>FB15k-237</span>
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/Yasmine-Gharsallah/Fairness_Privacy_FLKG_FB15k237" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Source code</a>
+        <a class="btn" href="https://github.com/Yasmine-Gharsallah/Fairness_Privacy_FLKG_FB15k237/blob/main/reports/FINAL_CAMPAIGN_RESULTS.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-lines"></i> Full results report</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section>
+      <div class="wrap">
+        <h2><span class="num">01</span>Results at a glance</h2>
+        <div class="stats">
+          <div class="stat">
+            <div class="v">0.246 <small>vs 0.240</small></div>
+            <div class="l">Federated MRR with Louvain partitioning vs the centralized model. Splitting by graph communities costs nothing.</div>
+          </div>
+          <div class="stat">
+            <div class="v">17×</div>
+            <div class="l">Drop in MRR when the graph is split by Freebase domain instead (0.246 → 0.0145).</div>
+          </div>
+          <div class="stat">
+            <div class="v">0.015 → 0.169</div>
+            <div class="l">Recovery from adding 20% domain-aware overlap between clients. Every domain improves.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2><span class="num">02</span>The question</h2>
+        <p>Knowledge graphs are often spread across institutions that cannot pool them, for legal or practical reasons. <strong>Federated learning</strong> lets each client train locally and share only model updates. Most papers treat how the graph gets divided between clients as a preprocessing detail.</p>
+        <p>We made it the variable. With every hyperparameter frozen, we asked: <strong>how does the partitioning strategy change the model's quality, and is the result fair across knowledge domains?</strong> A model that works well on <em>film</em> triples but fails on <em>people</em> triples is not something you can deploy.</p>
+
+        <div class="strategies" id="strategies"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2><span class="num">03</span>Global link-prediction quality</h2>
+        <p>All four setups are scored on the same global FB15k-237 test set (20,466 triples) using the filtered ranking protocol. Higher is better.</p>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="legend" id="globalLegend"></div>
+            <div class="seg" id="metricSeg" role="group" aria-label="Metric"></div>
+          </div>
+          <div class="chart" id="globalChart"></div>
+          <details>
+            <summary>Show as table</summary>
+            <div class="tablewrap" id="globalTable"></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2><span class="num">04</span>Is it fair across domains?</h2>
+        <p>We routed every test triple to one of 10 domains by its Freebase relation namespace and scored each domain separately. Louvain wins 6 of the 10. Pure domain partitioning is close to zero everywhere: every client only sees its own namespace, so it never learns the relations that cross into other domains.</p>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="legend" id="domainLegend" role="group" aria-label="Show or hide methods"></div>
+            <div class="seg" id="domainMetricSeg" role="group" aria-label="Metric"></div>
+          </div>
+          <div class="chart" id="domainChart"></div>
+          <details>
+            <summary>Show as table</summary>
+            <div class="tablewrap" id="domainTable"></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2><span class="num">05</span>What overlap does during training</h2>
+        <p>Same 10 domain clients, same 40 FedAvg rounds. The only difference is that in one run each client also receives about 20% extra boundary triples from other domains, with smaller domains getting a bigger share. Without that bridge, validation MRR barely moves off zero.</p>
+
+        <div class="card">
+          <div class="legend" id="curveLegend"></div>
+          <div class="chart" id="curveChart"></div>
+          <details>
+            <summary>Show as table</summary>
+            <div class="tablewrap" id="curveTable"></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2><span class="num">06</span>How it was built</h2>
+        <div class="pipeline">
+          <div class="step"><b>FB15k-237</b><span>official splits, inverse-leak-free</span></div>
+          <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          <div class="step"><b>Partitioner</b><span>Louvain · domain · overlap</span></div>
+          <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          <div class="step"><b>Local TransE</b><span>3 epochs per client per round</span></div>
+          <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          <div class="step"><b>FedAvg server</b><span>40 rounds, full participation</span></div>
+          <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          <div class="step"><b>Evaluation</b><span>filtered MRR, Hits@K, per domain</span></div>
+        </div>
+
+        <div class="two">
+          <div class="box">
+            <h3>Fixed setup</h3>
+            <ul>
+              <li>TransE, 200 dimensions, margin 6, L1 distance</li>
+              <li>Adam, lr 0.005, batch 1024, 50 negatives per positive</li>
+              <li>Centralized: 100 epochs · federated: 40 rounds × 3 local epochs</li>
+              <li>Equal-weight FedAvg, validation-based early stopping, seed 42</li>
+              <li>One script (<code>run_all.sh</code>) rebuilds the whole campaign, about 3 h on CPU</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>Earlier phases</h3>
+            <ul>
+              <li><strong>Overlap sweep:</strong> Louvain clients with 0–100% edge overlap. With no overlap the federation collapses, and a modest overlap is enough to recover it</li>
+              <li><strong>Fairness audit:</strong> per-client and per-domain metrics, plus a q-FedAvg sweep. q-FedAvg did not help, and we documented why</li>
+              <li><strong>Domain-aware overlap:</strong> our partition-level fix, which gives smaller domains a bigger share of the imported boundary triples</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2><span class="num">07</span>Takeaways</h2>
+        <ul class="findings">
+          <li><strong>Split by topology, not by label.</strong> Louvain communities with about 20% boundary overlap match centralized training (MRR 0.246 vs 0.240) and avoid the collapse.</li>
+          <li><strong>Semantic silos break federated KG embeddings.</strong> Clients that each own one namespace never see the cross-domain relations that <em>people</em>, <em>film</em> and <em>award</em> triples depend on.</li>
+          <li><strong>If the split is forced by policy, add overlap.</strong> Domain-aware overlap takes MRR from 0.015 to 0.169, but still sits about 30% below centralized, and that cost should be planned for.</li>
+          <li><strong>Structure explains little on its own.</strong> Only node degree correlates significantly with per-domain MRR, and only without overlap (Spearman ρ = −0.73). Whether a domain's relations cross namespace boundaries matters more.</li>
+        </ul>
+
+        <div class="two">
+          <div class="box">
+            <h3>Why this matters for privacy</h3>
+            <p style="font-size:0.95rem">Federated learning keeps raw triples on each client, but shared embeddings can still leak information. The partition is also where privacy policy gets decided. Knowing what a namespace-bound split costs in accuracy tells you what a privacy-driven design will cost.</p>
+          </div>
+          <div class="box">
+            <h3>Limits &amp; next steps</h3>
+            <ul>
+              <li>One model (TransE), one dataset, one seed. A RotatE check was designed but not completed</li>
+              <li>Local epochs were fixed at 3 and not swept</li>
+              <li>Next: a differential-privacy extension (DP-FedAvg with clipping and Gaussian noise) to measure the privacy/utility/fairness trade-off</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Yasmine Gharsallah</span>
+      <a href="../../index.html#projects">← All projects</a>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    // Results from results/final_campaign/ in the project repo (global test set, filtered protocol).
+    const METHODS = [
+      { key: 'louvain', name: 'Louvain · 5 clients, 20% overlap', short: 'Louvain', color: 'var(--s-louvain)' },
+      { key: 'domain',  name: 'Domain · 10 clients, no overlap', short: 'Domain', color: 'var(--s-domain)' },
+      { key: 'overlap', name: 'Domain + 20% domain-aware overlap', short: 'Domain + overlap', color: 'var(--s-overlap)' },
+      { key: 'central', name: 'Centralized baseline', short: 'Centralized', color: 'var(--s-central)' }
+    ];
+    const METRICS = ['MRR', 'Hits@1', 'Hits@3', 'Hits@10'];
+
+    const GLOBAL = {
+      louvain: [0.2463, 0.1631, 0.2756, 0.4107],
+      domain:  [0.0145, 0.0044, 0.0128, 0.0266],
+      overlap: [0.1689, 0.0916, 0.1933, 0.3126],
+      central: [0.2401, 0.1633, 0.2623, 0.3910]
+    };
+
+    // [domain, #test triples, {method: [MRR, H@1, H@3, H@10]}], ordered by test-set size
+    const DOMAINS = [
+      ['film', 5390, { louvain: [0.2380, 0.1558, 0.2633, 0.4029], domain: [0.0025, 0.0000, 0.0013, 0.0027], overlap: [0.1065, 0.0490, 0.1124, 0.2160], central: [0.2101, 0.1364, 0.2306, 0.3541] }],
+      ['people', 3901, { louvain: [0.2127, 0.1465, 0.2475, 0.3267], domain: [0.0024, 0.0000, 0.0004, 0.0023], overlap: [0.2328, 0.1389, 0.2924, 0.3921], central: [0.2737, 0.2056, 0.3092, 0.3907] }],
+      ['award', 3568, { louvain: [0.2085, 0.1151, 0.2372, 0.4046], domain: [0.0195, 0.0014, 0.0235, 0.0486], overlap: [0.0919, 0.0269, 0.1026, 0.2155], central: [0.1725, 0.0932, 0.1837, 0.3379] }],
+      ['other', 2405, { louvain: [0.3731, 0.2946, 0.4050, 0.5225], domain: [0.0240, 0.0025, 0.0179, 0.0486], overlap: [0.3058, 0.2229, 0.3339, 0.4578], central: [0.3572, 0.2813, 0.3811, 0.5106] }],
+      ['music', 1699, { louvain: [0.1750, 0.0859, 0.1881, 0.3564], domain: [0.0127, 0.0006, 0.0100, 0.0300], overlap: [0.1018, 0.0353, 0.0971, 0.2404], central: [0.1398, 0.0644, 0.1463, 0.2940] }],
+      ['education', 1277, { louvain: [0.2079, 0.1300, 0.2298, 0.3767], domain: [0.0259, 0.0204, 0.0223, 0.0282], overlap: [0.1758, 0.0850, 0.2024, 0.3614], central: [0.2098, 0.1269, 0.2298, 0.3829] }],
+      ['location', 921, { louvain: [0.3331, 0.2470, 0.3708, 0.4908], domain: [0.0793, 0.0575, 0.0803, 0.1107], overlap: [0.2506, 0.1270, 0.3312, 0.4501], central: [0.3496, 0.2676, 0.3865, 0.4984] }],
+      ['olympics', 450, { louvain: [0.3600, 0.2244, 0.3978, 0.6700], domain: [0.0084, 0.0000, 0.0033, 0.0089], overlap: [0.3130, 0.1911, 0.3222, 0.5944], central: [0.3343, 0.2111, 0.3589, 0.6044] }],
+      ['sports', 434, { louvain: [0.3168, 0.2200, 0.3629, 0.4977], domain: [0.0132, 0.0000, 0.0046, 0.0300], overlap: [0.1239, 0.0403, 0.1463, 0.2707], central: [0.2909, 0.1982, 0.3145, 0.4781] }],
+      ['base', 421, { louvain: [0.2795, 0.1734, 0.3444, 0.4846], domain: [0.0208, 0.0000, 0.0095, 0.0570], overlap: [0.2113, 0.1152, 0.2447, 0.3884], central: [0.3217, 0.2316, 0.3575, 0.4988] }]
+    ];
+
+    // Validation MRR per FedAvg round (evaluated every 2 rounds)
+    const CURVES = {
+      domain: [[1,0.0076],[3,0.0087],[5,0.0095],[7,0.0106],[9,0.0116],[11,0.0124],[13,0.0128],[15,0.0133],[17,0.0136],[19,0.0140],[21,0.0141],[23,0.0143],[25,0.0145],[27,0.0147],[29,0.0148],[31,0.0149],[33,0.0149],[35,0.0149],[37,0.0149],[39,0.0149]],
+      overlap: [[1,0.1051],[3,0.1354],[5,0.1457],[7,0.1503],[9,0.1535],[11,0.1553],[13,0.1576],[15,0.1593],[17,0.1619],[19,0.1637],[21,0.1642],[23,0.1660],[25,0.1678],[27,0.1669],[29,0.1682],[31,0.1701],[33,0.1702],[35,0.1703],[37,0.1713],[39,0.1713]]
+    };
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const byKey = Object.fromEntries(METHODS.map(m => [m.key, m]));
+    const fmt = v => v.toFixed(3);
+
+    function el(tag, attrs, parent) {
+      const n = document.createElementNS(NS, tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(n);
+      return n;
+    }
+    function text(parent, x, y, str, cls, anchor) {
+      const t = el('text', { x, y, class: cls, 'text-anchor': anchor || 'start', 'dominant-baseline': 'middle' }, parent);
+      t.textContent = str;
+      return t;
+    }
+    // horizontal bar with a 4px rounded data-end and a square baseline end
+    function hbar(parent, x0, y, w, h, color) {
+      if (w <= 0) return;
+      const r = Math.min(4, w, h / 2);
+      const d = `M${x0},${y}H${x0 + w - r}Q${x0 + w},${y} ${x0 + w},${y + r}V${y + h - r}Q${x0 + w},${y + h} ${x0 + w - r},${y + h}H${x0}Z`;
+      el('path', { d, fill: color }, parent);
+    }
+    function niceMax(v) {
+      const step = v > 0.3 ? 0.1 : 0.05;
+      return Math.ceil(v / step) * step;
+    }
+
+    // ---------- tooltip ----------
+    function makeTip(host) {
+      const tip = document.createElement('div');
+      tip.className = 'tip';
+      tip.setAttribute('role', 'status');
+      host.appendChild(tip);
+      return {
+        show(html, evt) {
+          tip.innerHTML = html;
+          tip.classList.add('on');
+          const hb = host.getBoundingClientRect();
+          let x = evt.clientX - hb.left + 14, y = evt.clientY - hb.top + 14;
+          const tw = tip.offsetWidth, th = tip.offsetHeight;
+          if (x + tw > hb.width) x = evt.clientX - hb.left - tw - 14;
+          if (x < 0) x = 4;
+          if (y + th > hb.height + 40) y = evt.clientY - hb.top - th - 10;
+          tip.style.left = x + 'px';
+          tip.style.top = y + 'px';
+        },
+        hide() { tip.classList.remove('on'); }
+      };
+    }
+    function tipRows(title, rows) {
+      return `<div class="t">${title}</div>` + rows.map(r =>
+        `<div class="r" style="--c:${r.color}"><i></i>${r.label}<b>${r.value}</b></div>`).join('');
+    }
+
+    function segmented(host, labels, onChange) {
+      labels.forEach((lab, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = lab;
+        b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+        b.addEventListener('click', () => {
+          host.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false'));
+          b.setAttribute('aria-pressed', 'true');
+          onChange(i);
+        });
+        host.appendChild(b);
+      });
+    }
+
+    // ---------- strategy schematics ----------
+    (function drawStrategies() {
+      const host = document.getElementById('strategies');
+      const cards = [
+        { key: 'central', title: 'Centralized', body: 'All 272k training triples on one server. The upper-bound reference.' },
+        { key: 'louvain', title: 'Louvain', body: '5 clients from modularity-based communities, plus 20% of boundary edges copied across.' },
+        { key: 'domain', title: 'Domain', body: '10 clients, one per Freebase namespace (film, people, award…). No shared edges.' },
+        { key: 'overlap', title: 'Domain + overlap', body: 'Same 10 clients, plus 20% imported boundary triples, weighted toward small domains.' }
+      ];
+      // deterministic pseudo-random so the drawing never changes between loads
+      let seed = 7;
+      const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+      cards.forEach(c => {
+        const m = byKey[c.key];
+        const card = document.createElement('div');
+        card.className = 'strat';
+        card.style.setProperty('--c', m.color);
+        const svg = el('svg', { viewBox: '0 0 200 110', role: 'img', 'aria-label': c.title + ' partitioning schematic' });
+        const groups = c.key === 'central' ? [[100, 55, 40]] :
+          c.key === 'louvain' ? [[40, 35, 22], [100, 30, 22], [160, 38, 22], [65, 82, 22], [140, 84, 22]] :
+          [[28, 30, 13], [68, 26, 13], [108, 30, 13], [148, 26, 13], [180, 52, 11], [30, 78, 13], [70, 84, 13], [110, 80, 13], [150, 84, 13], [100, 55, 9]];
+        const nodes = [];
+        groups.forEach((g, gi) => {
+          el('circle', { cx: g[0], cy: g[1], r: g[2] + 4, fill: 'none', stroke: 'rgba(255,255,255,0.14)', 'stroke-dasharray': c.key === 'central' ? '0' : '3 3' }, svg);
+          const n = c.key === 'central' ? 22 : c.key === 'louvain' ? 6 : 4;
+          for (let i = 0; i < n; i++) {
+            const a = rnd() * Math.PI * 2, rr = Math.sqrt(rnd()) * g[2];
+            nodes.push({ x: g[0] + Math.cos(a) * rr, y: g[1] + Math.sin(a) * rr, g: gi });
+          }
+        });
+        const edges = el('g', {}, svg);
+        nodes.forEach((a, i) => {
+          nodes.forEach((b, j) => {
+            if (j <= i) return;
+            const d = Math.hypot(a.x - b.x, a.y - b.y);
+            const same = a.g === b.g;
+            const cross = !same && (c.key === 'louvain' || c.key === 'overlap') && d < 48 && rnd() < 0.18;
+            if ((same && d < 22) || cross) {
+              el('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: cross ? m.color : 'rgba(255,255,255,0.22)', 'stroke-width': cross ? 1.4 : 0.8 }, edges);
+            }
+          });
+        });
+        nodes.forEach(n => el('circle', { cx: n.x, cy: n.y, r: 2.6, fill: m.color }, svg));
+        card.appendChild(svg);
+        const h = document.createElement('h3'); h.textContent = c.title; card.appendChild(h);
+        const p = document.createElement('p'); p.textContent = c.body; card.appendChild(p);
+        host.appendChild(card);
+      });
+    })();
+
+    // ---------- chart 1: global metrics ----------
+    (function globalChart() {
+      const host = document.getElementById('globalChart');
+      const tip = makeTip(host);
+      const legend = document.getElementById('globalLegend');
+      METHODS.forEach(m => {
+        const s = document.createElement('span');
+        s.className = 'item'; s.style.setProperty('--c', m.color);
+        s.innerHTML = `<i></i>${m.short}`;
+        legend.appendChild(s);
+      });
+
+      function draw(mi) {
+        host.querySelectorAll('svg').forEach(s => s.remove());
+        const W = Math.max(300, host.clientWidth || 800), narrow = W < 560;
+        const labelW = narrow ? 118 : 250, right = 60, rowH = 46, barH = 22, top = 8;
+        const H = top + METHODS.length * rowH + 30;
+        const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': METRICS[mi] + ' by partitioning method' });
+        host.insertBefore(svg, host.firstChild);
+        const plotW = W - labelW - right;
+        const max = niceMax(Math.max(...METHODS.map(m => GLOBAL[m.key][mi])));
+        const x = v => labelW + (v / max) * plotW;
+        const step = max > 0.3 ? 0.1 : 0.05;
+        for (let v = 0; v <= max + 1e-9; v += step) {
+          el('line', { x1: x(v), x2: x(v), y1: top, y2: H - 26, class: v === 0 ? 'baseline' : 'gridline' }, svg);
+          text(svg, x(v), H - 12, v.toFixed(2), 'tick', 'middle');
+        }
+        METHODS.forEach((m, i) => {
+          const y = top + i * rowH + (rowH - barH) / 2;
+          const v = GLOBAL[m.key][mi];
+          text(svg, labelW - 12, y + barH / 2, narrow ? m.short : m.name, 'cat', 'end');
+          hbar(svg, x(0), y, x(v) - x(0), barH, m.color);
+          text(svg, x(v) + 8, y + barH / 2, fmt(v), 'val');
+          const hit = el('rect', { x: 0, y: top + i * rowH, width: W, height: rowH, class: 'hit' }, svg);
+          el('rect', { x: 0, y: top + i * rowH, width: W, height: rowH, class: 'row-hover', rx: 6 }, svg);
+          hit.addEventListener('mousemove', e => tip.show(tipRows(m.name, METRICS.map((mm, k) => ({ color: m.color, label: mm, value: fmt(GLOBAL[m.key][k]) }))), e));
+          hit.addEventListener('mouseleave', () => tip.hide());
+        });
+      }
+      let cur = 0;
+      segmented(document.getElementById('metricSeg'), METRICS, i => { cur = i; draw(i); });
+      draw(0);
+      window.addEventListener('resize', () => draw(cur));
+
+      document.getElementById('globalTable').innerHTML =
+        '<table><thead><tr><th>Method</th>' + METRICS.map(m => `<th>${m}</th>`).join('') + '</tr></thead><tbody>' +
+        METHODS.map(m => `<tr><td>${m.name}</td>` + GLOBAL[m.key].map(v => `<td>${fmt(v)}</td>`).join('') + '</tr>').join('') +
+        '</tbody></table>';
+    })();
+
+    // ---------- chart 2: per-domain ----------
+    (function domainChart() {
+      const host = document.getElementById('domainChart');
+      const tip = makeTip(host);
+      const legend = document.getElementById('domainLegend');
+      const visible = Object.fromEntries(METHODS.map(m => [m.key, true]));
+      let mi = 0;
+
+      METHODS.forEach(m => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.style.setProperty('--c', m.color);
+        b.setAttribute('aria-pressed', 'true');
+        b.innerHTML = `<i></i>${m.short}`;
+        b.addEventListener('click', () => {
+          const on = b.getAttribute('aria-pressed') === 'true';
+          if (on && Object.values(visible).filter(Boolean).length === 1) return; // keep at least one
+          visible[m.key] = !on;
+          b.setAttribute('aria-pressed', String(!on));
+          draw();
+        });
+        legend.appendChild(b);
+      });
+
+      function draw() {
+        host.querySelectorAll('svg').forEach(s => s.remove());
+        const shown = METHODS.filter(m => visible[m.key]);
+        const W = Math.max(300, host.clientWidth || 800), labelW = W < 560 ? 96 : 120, right = 50, barH = 7, gap = 2, top = 6;
+        const groupH = shown.length * (barH + gap) - gap;
+        const rowH = groupH + 20;
+        const H = top + DOMAINS.length * rowH + 28;
+        const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': METRICS[mi] + ' per knowledge domain' });
+        host.insertBefore(svg, host.firstChild);
+        const plotW = W - labelW - right;
+        const max = niceMax(Math.max(...DOMAINS.flatMap(d => shown.map(m => d[2][m.key][mi]))));
+        const x = v => labelW + (v / max) * plotW;
+        const step = 0.1;
+        for (let v = 0; v <= max + 1e-9; v += step) {
+          el('line', { x1: x(v), x2: x(v), y1: top, y2: H - 24, class: v === 0 ? 'baseline' : 'gridline' }, svg);
+          text(svg, x(v), H - 10, v.toFixed(1), 'tick', 'middle');
+        }
+        DOMAINS.forEach((d, i) => {
+          const y0 = top + i * rowH + 10;
+          text(svg, labelW - 12, y0 + groupH / 2 - 5, d[0], 'cat', 'end');
+          text(svg, labelW - 12, y0 + groupH / 2 + 10, d[1].toLocaleString('en') + ' triples', 'tick', 'end');
+          shown.forEach((m, k) => {
+            const v = d[2][m.key][mi];
+            hbar(svg, x(0), y0 + k * (barH + gap), Math.max(x(v) - x(0), 1.5), barH, m.color);
+          });
+          // label only the best method in each domain
+          const best = shown.reduce((a, m) => d[2][m.key][mi] > d[2][a.key][mi] ? m : a, shown[0]);
+          const bi = shown.indexOf(best);
+          text(svg, x(d[2][best.key][mi]) + 6, y0 + bi * (barH + gap) + barH / 2, fmt(d[2][best.key][mi]), 'val');
+
+          const hit = el('rect', { x: 0, y: top + i * rowH, width: W, height: rowH, class: 'hit' }, svg);
+          el('rect', { x: 0, y: top + i * rowH, width: W, height: rowH, class: 'row-hover', rx: 6 }, svg);
+          hit.addEventListener('mousemove', e => tip.show(tipRows(`${d[0]} · ${METRICS[mi]}`,
+            shown.map(m => ({ color: m.color, label: m.short, value: fmt(d[2][m.key][mi]) }))), e));
+          hit.addEventListener('mouseleave', () => tip.hide());
+        });
+        renderTable();
+      }
+      function renderTable() {
+        document.getElementById('domainTable').innerHTML =
+          `<table><thead><tr><th>Domain (${METRICS[mi]})</th><th>Test triples</th>` + METHODS.map(m => `<th>${m.short}</th>`).join('') + '</tr></thead><tbody>' +
+          DOMAINS.map(d => `<tr><td>${d[0]}</td><td>${d[1].toLocaleString('en')}</td>` + METHODS.map(m => `<td>${fmt(d[2][m.key][mi])}</td>`).join('') + '</tr>').join('') +
+          '</tbody></table>';
+      }
+      segmented(document.getElementById('domainMetricSeg'), METRICS, i => { mi = i; draw(); });
+      draw();
+      window.addEventListener('resize', draw);
+    })();
+
+    // ---------- chart 3: convergence ----------
+    (function curveChart() {
+      const host = document.getElementById('curveChart');
+      const tip = makeTip(host);
+      const series = ['overlap', 'domain'].map(k => byKey[k]);
+      const legend = document.getElementById('curveLegend');
+      series.forEach(m => {
+        const s = document.createElement('span');
+        s.className = 'item'; s.style.setProperty('--c', m.color);
+        s.innerHTML = `<i></i>${m.short}`;
+        legend.appendChild(s);
+      });
+
+      function draw() {
+        host.querySelectorAll('svg').forEach(s => s.remove());
+        const W = Math.max(300, host.clientWidth || 800), narrow = W < 560;
+        const H = narrow ? 260 : 310, L = 44, R = narrow ? 104 : 130, T = 12, B = 46;
+        const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Validation MRR per FedAvg round, with and without overlap' });
+        host.appendChild(svg);
+        const x = r => L + (r / 40) * (W - L - R);
+        const y = v => T + (1 - v / 0.2) * (H - T - B);
+        for (let v = 0; v <= 0.2001; v += 0.05) {
+          el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), class: v === 0 ? 'baseline' : 'gridline' }, svg);
+          text(svg, L - 10, y(v), v.toFixed(2), 'tick', 'end');
+        }
+        for (let r = 0; r <= 40; r += narrow ? 20 : 10) text(svg, x(r), H - 30, String(r), 'tick', 'middle');
+        text(svg, (L + W - R) / 2, H - 10, 'FedAvg round', 'tick', 'middle');
+
+        series.forEach(m => {
+          const pts = CURVES[m.key];
+          el('path', { d: pts.map((p, i) => (i ? 'L' : 'M') + x(p[0]) + ',' + y(p[1])).join(''), fill: 'none', stroke: m.color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+          const last = pts[pts.length - 1];
+          el('circle', { cx: x(last[0]), cy: y(last[1]), r: 4, fill: m.color, stroke: 'var(--surface)', 'stroke-width': 2 }, svg);
+          text(svg, x(last[0]) + 10, y(last[1]) - 7, narrow && m.key === 'overlap' ? '+ overlap' : m.short, 'cat');
+          text(svg, x(last[0]) + 10, y(last[1]) + 9, fmt(last[1]), 'val');
+        });
+
+        const cross = el('line', { x1: 0, x2: 0, y1: T, y2: H - B, stroke: 'rgba(255,255,255,0.25)', 'stroke-width': 1, opacity: 0 }, svg);
+        const dots = series.map(m => el('circle', { r: 5, fill: m.color, stroke: 'var(--surface)', 'stroke-width': 2, opacity: 0 }, svg));
+        const hit = el('rect', { x: L, y: T, width: W - L - R, height: H - T - B, class: 'hit' }, svg);
+        hit.addEventListener('mousemove', e => {
+          const b = svg.getBoundingClientRect();
+          const sx = (e.clientX - b.left) * (W / b.width);
+          const round = ((sx - L) / (W - L - R)) * 40;
+          const idx = CURVES.domain.reduce((best, p, i) => Math.abs(p[0] - round) < Math.abs(CURVES.domain[best][0] - round) ? i : best, 0);
+          const r = CURVES.domain[idx][0];
+          cross.setAttribute('x1', x(r)); cross.setAttribute('x2', x(r)); cross.setAttribute('opacity', 1);
+          series.forEach((m, k) => {
+            dots[k].setAttribute('cx', x(r)); dots[k].setAttribute('cy', y(CURVES[m.key][idx][1])); dots[k].setAttribute('opacity', 1);
+          });
+          tip.show(tipRows(`Round ${r} · validation MRR`, series.map(m => ({ color: m.color, label: m.short, value: fmt(CURVES[m.key][idx][1]) }))), e);
+        });
+        hit.addEventListener('mouseleave', () => {
+          tip.hide(); cross.setAttribute('opacity', 0); dots.forEach(d => d.setAttribute('opacity', 0));
+        });
+      }
+      draw();
+      window.addEventListener('resize', draw);
+
+      document.getElementById('curveTable').innerHTML =
+        '<table><thead><tr><th>Round</th>' + series.map(m => `<th>${m.short}</th>`).join('') + '</tr></thead><tbody>' +
+        CURVES.domain.map((p, i) => `<tr><td>${p[0]}</td>` + series.map(m => `<td>${fmt(CURVES[m.key][i][1])}</td>`).join('') + '</tr>').join('') +
+        '</tbody></table>';
+    })();
+  })();
+  </script>
+</body>
+</html>
