@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Yasmine Gharsallah — final-year ICT & Cybersecurity Engineering student (EURECOM × SUP'COM). Portfolio focused on SOC operations, incident response, DevSecOps, cloud security, CTFs and privacy-preserving AI. Seeking an end-of-studies internship from February 2027." />
+  <meta name="keywords" content="Yasmine Gharsallah, Cybersecurity, SOC Analyst, DevSecOps, Incident Response, CTF, EURECOM, SUP'COM, Cloud Security, AWS, Differential Privacy, Internship 2027" />
+  <meta name="author" content="Yasmine Gharsallah" />
+  <title>Yasmine Gharsallah — Cybersecurity Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-grid"></div>
+  <canvas id="particles"></canvas>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+
+  <!-- Custom cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loader-content">
+      <div class="loader-text">
+        <span>&gt;</span>
+        <span class="typing">initializing_portfolio</span>
+        <span class="blink">_</span>
+      </div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <a href="#home" class="nav-logo">
+      <span class="logo-bracket">&lt;</span>
+      <span class="logo-text">YG</span>
+      <span class="logo-dot">.</span>
+      <span class="logo-bracket">/&gt;</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about" data-nav>About</a></li>
+      <li><a href="#journey" data-nav>Journey</a></li>
+      <li><a href="#projects" data-nav>Projects</a></li>
+      <li><a href="#learning" data-nav>Learning</a></li>
+      <li><a href="#ctf" data-nav>CTFs</a></li>
+      <li><a href="#skills" data-nav>Skills</a></li>
+      <li><a href="#certifications" data-nav>Certs</a></li>
+      <li><a href="#community" data-nav>Community</a></li>
+      <li><a href="#contact" data-nav>Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">
+      <span>Hire Me</span>
+      <i class="fa-solid fa-arrow-right"></i>
+    </a>
+    <button class="nav-burger" id="burger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <div class="hero-status">
+        <span class="status-dot"></span>
+        <span>Seeking End-of-Studies Internship · From February 2027</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="hero-greet">Hi, I'm</span>
+        <span class="hero-name">
+          <span class="name-glitch" data-text="Yasmine">Yasmine</span>
+          <span class="name-glitch last" data-text="Gharsallah">Gharsallah</span>
+        </span>
+      </h1>
+
+      <div class="hero-role">
+        <span class="role-prefix">&gt;_ </span>
+        <span class="role-text" id="roleText"></span>
+        <span class="role-caret">|</span>
+      </div>
+
+      <p class="hero-desc">
+        Final-year <strong>ICT &amp; Cybersecurity Engineering</strong> student on a double degree
+        between <strong>EURECOM</strong> (France) and <strong>SUP'COM</strong> (Tunisia).
+        I'm building toward <strong>SOC operations, incident response and DevSecOps</strong> —
+        learning hands-on through TryHackMe paths, CTFs, and security-focused projects.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#ctf" class="btn btn-primary">
+          <span>See My Hands-On Work</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a href="#contact" class="btn btn-ghost">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>Get in Touch</span>
+        </a>
+        <a href="assets/cv/CV_Yasmine_Gharsallah.pdf" class="btn btn-ghost" download>
+          <i class="fa-solid fa-download"></i>
+          <span>Download CV</span>
+        </a>
+      </div>
+
+      <div class="hero-social">
+        <a href="mailto:yasmine.gharsallah@eurecom.fr" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/yasmine-gharsallah-07a3082a0/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="tel:+33754863850" aria-label="Phone"><i class="fa-solid fa-phone"></i></a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num" data-target="915">0</div>
+          <div class="stat-label">TOEIC Score /990</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" data-target="5">0</div>
+          <div class="stat-label">Featured Projects</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" data-target="8">0</div>
+          <div class="stat-label">Certifications</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" data-target="2">0</div>
+          <div class="stat-label">THM Paths In Progress</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-photo">
+        <div class="photo-frame">
+          <div class="photo-placeholder">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Optional: add a photo at<br/><code>assets/images/yasmine.jpg</code></span>
+          </div>
+          <!-- <img src="assets/images/yasmine.jpg" alt="Yasmine Gharsallah"/> -->
+        </div>
+        <div class="photo-orbit orbit-1"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="photo-orbit orbit-2"><i class="fa-solid fa-terminal"></i></div>
+        <div class="photo-orbit orbit-3"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+        <div class="photo-orbit orbit-4"><i class="fa-solid fa-lock"></i></div>
+      </div>
+    </div>
+
+    <a href="#about" class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">01</span>
+        <h2 class="section-title">About Me</h2>
+        <p class="section-sub">The story behind the code</p>
+      </header>
+
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="about-lead">
+            I'm a final-year <span class="hl">Cybersecurity &amp; ICT Engineering</span> student,
+            actively seeking an <span class="hl">end-of-studies internship from February 2027</span>
+            in the security of computer systems and communications.
+          </p>
+          <p>
+            I'm completing a <span class="hl">double degree</span> — a Post-Master in
+            <span class="hl">Security in Computer Systems and Communications</span> at EURECOM (France),
+            on top of my ICT engineering degree at SUP'COM (Tunisia). My core interests are
+            <span class="hl">SOC operations, incident response, and DevSecOps</span>, backed by a
+            solid foundation in networks, cloud security, cryptography and hardware security.
+          </p>
+          <p>
+            I learn by doing. I'm currently working through the <span class="hl">TryHackMe SOC Level 1</span>
+            and <span class="hl">DevSecOps</span> paths, playing <span class="hl">CTFs</span>
+            (Linux privilege escalation, binary exploitation, network forensics), and building
+            security-focused projects — from a serverless secure-document platform on AWS to a
+            side-channel attack on hardware.
+          </p>
+          <p>
+            On the research side, I study <span class="hl">fairness and differential privacy in
+            federated learning on knowledge graphs</span> at EURECOM — analysing bias propagation and
+            privacy trade-offs under non-IID data. Beyond the terminal, I lead a volunteering
+            initiative for children with cancer and stay active in student tech communities.
+          </p>
+
+          <div class="about-highlights">
+            <div class="highlight">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <div>
+                <h4>Double Degree</h4>
+                <p>EURECOM × SUP'COM</p>
+              </div>
+            </div>
+            <div class="highlight">
+              <i class="fa-solid fa-location-dot"></i>
+              <div>
+                <h4>Based in</h4>
+                <p>Antibes, France</p>
+              </div>
+            </div>
+            <div class="highlight">
+              <i class="fa-solid fa-language"></i>
+              <div>
+                <h4>Languages</h4>
+                <p>AR · FR · EN · ES</p>
+              </div>
+            </div>
+            <div class="highlight">
+              <i class="fa-solid fa-bullseye"></i>
+              <div>
+                <h4>Seeking</h4>
+                <p>End-of-Studies Intern · Feb 2027</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="about-card">
+          <div class="card-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="card-title">~/yasmine/profile.json</span>
+          </div>
+          <pre class="code-block"><code><span class="c-key">{</span>
+  <span class="c-key">"name"</span>: <span class="c-str">"Yasmine Gharsallah"</span>,
+  <span class="c-key">"role"</span>: <span class="c-str">"Cybersecurity Student"</span>,
+  <span class="c-key">"focus"</span>: [
+    <span class="c-str">"SOC Operations"</span>,
+    <span class="c-str">"Incident Response"</span>,
+    <span class="c-str">"DevSecOps"</span>,
+    <span class="c-str">"Cloud &amp; Network Security"</span>
+  ],
+  <span class="c-key">"learning"</span>: [
+    <span class="c-str">"TryHackMe SOC Level 1"</span>,
+    <span class="c-str">"TryHackMe DevSecOps"</span>
+  ],
+  <span class="c-key">"plays"</span>: <span class="c-str">"CTFs · pwn · forensics"</span>,
+  <span class="c-key">"seeking"</span>: <span class="c-str">"End-of-Studies Internship 2027"</span>,
+  <span class="c-key">"status"</span>: <span class="c-ok">"open_to_opportunities"</span>
+<span class="c-key">}</span></code></pre>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNEY: education + experience -->
+  <section id="journey" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">02</span>
+        <h2 class="section-title">My Journey</h2>
+        <p class="section-sub">Education &amp; professional experience</p>
+      </header>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-dot"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="tl-card featured">
+            <div class="tl-date">Sep 2025 — Present</div>
+            <h3>EURECOM · Post-Master</h3>
+            <h4>Security in Computer Systems and Communications</h4>
+            <p class="tl-loc"><i class="fa-solid fa-location-dot"></i> Biot, France</p>
+            <p>Graduate school and research center in digital science. Coursework in Hardware Security, System &amp; Network Security, Secure Communications, Imaging Security, Digital Forensics, and Wireless Security.</p>
+            <div class="tl-tags">
+              <span>Digital Forensics</span>
+              <span>Network Security</span>
+              <span>Hardware Security</span>
+              <span>Wireless Security</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="tl-dot"><i class="fa-solid fa-microchip"></i></div>
+          <div class="tl-card">
+            <div class="tl-date">Sep 2023 — Present</div>
+            <h3>SUP'COM — Higher School of Communications of Tunis</h3>
+            <h4>ICT Engineering Student</h4>
+            <p class="tl-loc"><i class="fa-solid fa-location-dot"></i> Tunis, Tunisia</p>
+            <p>Engineering degree in Information &amp; Communication Technologies. Coursework in Advanced Malware Reverse Engineering, Cryptography, Hardware Security, FMCW Radar &amp; AI, Big Data, Cloud Fundamentals and Optimization.</p>
+            <div class="tl-tags">
+              <span>Malware Reverse Eng.</span>
+              <span>Cryptography</span>
+              <span>Big Data</span>
+              <span>Cloud Fundamentals</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="tl-dot"><i class="fa-solid fa-briefcase"></i></div>
+          <div class="tl-card">
+            <div class="tl-date">Jul — Aug 2024</div>
+            <h3>Tunisie Telecom · Summer Intern</h3>
+            <h4>Technical and Customer Service Center</h4>
+            <p class="tl-loc"><i class="fa-solid fa-location-dot"></i> Ariana, Tunisia</p>
+            <p>Hands-on experience in subscriber network architecture (RLA), copper and fiber optic technologies (FTTC/FTTH), fault management processes, and telecom line configurations.</p>
+            <div class="tl-tags">
+              <span>FTTH / FTTC</span>
+              <span>Network Architecture</span>
+              <span>Fault Management</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="tl-dot"><i class="fa-solid fa-square-root-variable"></i></div>
+          <div class="tl-card">
+            <div class="tl-date">Sep 2021 — Jun 2023</div>
+            <h3>Preparatory Institute for Engineering Studies of Sfax</h3>
+            <h4>Pre-Engineering (Math-Physics)</h4>
+            <p class="tl-loc"><i class="fa-solid fa-location-dot"></i> Sfax, Tunisia</p>
+            <p>Ranked <strong>179 / 1780</strong> in the National Entrance Exams for Engineering Training Cycles (MP track).</p>
+            <div class="tl-tags">
+              <span>Mathematics</span>
+              <span>Physics</span>
+              <span>Top 10%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="tl-dot"><i class="fa-solid fa-school"></i></div>
+          <div class="tl-card">
+            <div class="tl-date">Jun 2021</div>
+            <h3>Baccalaureate — Honours</h3>
+            <h4>Mathematics / Sciences track</h4>
+            <p class="tl-loc"><i class="fa-solid fa-location-dot"></i> Sfax, Tunisia</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Featured Projects</h2>
+        <p class="section-sub">Security, cloud, hardware &amp; AI</p>
+      </header>
+
+      <div class="project-filters" id="projectFilters">
+        <button class="filter active" data-filter="all">All</button>
+        <button class="filter" data-filter="security">Security</button>
+        <button class="filter" data-filter="cloud">Cloud</button>
+        <button class="filter" data-filter="ai">AI / ML</button>
+      </div>
+
+      <div class="projects-grid" id="projectsGrid">
+
+        <article class="project-card featured-project" data-category="cloud security">
+          <div class="project-media">
+            <div class="project-icon-bg"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <span class="project-status">Jan — May 2025</span>
+            <span class="project-badge">Featured</span>
+          </div>
+          <div class="project-body">
+            <h3>Secure Cloud-Based Document Management System</h3>
+            <p>Serverless enterprise platform to securely store, share and track confidential documents — fine-grained access control, multi-factor authentication and activity logging, on a fully serverless AWS architecture.</p>
+            <div class="project-stack">
+              <span>Angular</span>
+              <span>Spring Boot</span>
+              <span>AWS Cognito</span>
+              <span>S3</span>
+              <span>Lambda</span>
+              <span>IAM</span>
+              <span>RDS</span>
+              <span>PostgreSQL</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener" class="p-link"><i class="fa-brands fa-github"></i> GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="security">
+          <div class="project-media">
+            <div class="project-icon-bg"><i class="fa-solid fa-microchip"></i></div>
+            <span class="project-status">Jan — Feb 2025</span>
+          </div>
+          <div class="project-body">
+            <h3>DES Implementation &amp; CPA Side-Channel Attack (VHDL)</h3>
+            <p>Implemented the DES algorithm in VHDL and simulated it on a Xilinx Artix-7 FPGA (XC7A35T), then exploited internal signal transitions to mount a Correlation Power Analysis (CPA) side-channel attack recovering key bits.</p>
+            <div class="project-stack">
+              <span>VHDL</span>
+              <span>Xilinx Vivado</span>
+              <span>Artix-7 FPGA</span>
+              <span>CPA</span>
+              <span>Side-Channel</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener" class="p-link"><i class="fa-brands fa-github"></i> GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="ai security">
+          <div class="project-media">
+            <div class="project-icon-bg"><i class="fa-solid fa-shield-halved"></i></div>
+            <span class="project-status">Mar 2025 — Present</span>
+          </div>
+          <div class="project-body">
+            <h3>Fairness &amp; Differential Privacy in Federated Learning on Knowledge Graphs</h3>
+            <p>Research project (EURECOM, Spring 2026) training TransE embeddings on the FB15k-237 knowledge graph across centralized and federated (FedAvg) settings. Studied Louvain community and domain-based graph partitioning, overlap injection, and Differential Privacy trade-offs — evaluated with filtered MRR and Hits@K.</p>
+            <div class="project-stack">
+              <span>Python</span>
+              <span>PyTorch</span>
+              <span>NetworkX</span>
+              <span>FedAvg</span>
+              <span>Louvain</span>
+              <span>TransE</span>
+              <span>Differential Privacy</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener" class="p-link"><i class="fa-brands fa-github"></i> GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="ai security">
+          <div class="project-media">
+            <div class="project-icon-bg"><i class="fa-solid fa-microphone-lines"></i></div>
+            <span class="project-status">Oct 2024 — Feb 2025</span>
+          </div>
+          <div class="project-body">
+            <h3>Phone Duration Impacts in Voice Anonymisation</h3>
+            <p>Built speech-processing pipelines to extract phone-level durations from original and anonymised speech, then evaluated anonymisation robustness with three re-identification attacks (metric-based, duration-embedding, semi-informed filter-bank), measuring Equal Error Rate on LibriSpeech under the VoicePrivacy protocol.</p>
+            <div class="project-stack">
+              <span>Python</span>
+              <span>librosa</span>
+              <span>WORLD Vocoder</span>
+              <span>MFA</span>
+              <span>PyTorch (BiGRU)</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener" class="p-link"><i class="fa-brands fa-github"></i> GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-category="ai">
+          <div class="project-media">
+            <div class="project-icon-bg"><i class="fa-solid fa-car-burst"></i></div>
+            <span class="project-status">Apr — May 2025</span>
+          </div>
+          <div class="project-body">
+            <h3>Traffic Monitoring: mmWave Radar &amp; Camera Fusion</h3>
+            <p>Traffic monitoring system on the Open Urban mmWave Radar &amp; Camera dataset — feature extraction, DBSCAN clustering, KNN classification and YOLOv8 object detection, combined with high-level sensor fusion to improve detection accuracy and reliability.</p>
+            <div class="project-stack">
+              <span>YOLOv8</span>
+              <span>KNN</span>
+              <span>DBSCAN</span>
+              <span>Python</span>
+              <span>Sensor Fusion</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener" class="p-link"><i class="fa-brands fa-github"></i> GitHub</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+      <p class="section-foot">More work on <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener">github.com/Yasmine-Gharsallah</a></p>
+    </div>
+  </section>
+
+  <!-- LEARNING PATHS (TryHackMe, in progress) -->
+  <section id="learning" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">04</span>
+        <h2 class="section-title">Learning Paths — In Progress</h2>
+        <p class="section-sub">Structured, hands-on training on TryHackMe</p>
+      </header>
+
+      <div class="paths-grid">
+
+        <!-- SOC Level 1 -->
+        <article class="path-card">
+          <div class="path-head">
+            <div class="path-icon soc"><i class="fa-solid fa-shield-virus"></i></div>
+            <div>
+              <h3>SOC Level 1</h3>
+              <span class="path-provider">TryHackMe · Blue Team</span>
+            </div>
+            <span class="path-status">In Progress</span>
+          </div>
+          <p class="path-desc">Core skills of a Tier-1 Security Operations Center analyst: triaging alerts, analysing logs and traffic, and driving early incident response.</p>
+          <div class="path-progress"><span style="--p:55%"></span></div>
+          <ul class="path-modules">
+            <li><i class="fa-solid fa-sitemap"></i><div><strong>Cyber Defence Frameworks</strong><span>MITRE ATT&amp;CK, Cyber Kill Chain, Pyramid of Pain, Diamond Model</span></div></li>
+            <li><i class="fa-solid fa-brain"></i><div><strong>Cyber Threat Intelligence</strong><span>IOCs, MISP, OpenCTI, YARA, threat-intel workflows</span></div></li>
+            <li><i class="fa-solid fa-network-wired"></i><div><strong>Network Security &amp; Traffic Analysis</strong><span>Wireshark, tcpdump, Snort, Zeek, Brim, NetworkMiner</span></div></li>
+            <li><i class="fa-solid fa-desktop"></i><div><strong>Endpoint Security Monitoring</strong><span>Windows internals, Sysmon, Event Logs, OSQuery, Wazuh</span></div></li>
+            <li><i class="fa-solid fa-magnifying-glass-chart"></i><div><strong>SIEM</strong><span>Splunk &amp; the ELK / Elastic Stack — searching and correlating events</span></div></li>
+            <li><i class="fa-solid fa-fingerprint"></i><div><strong>DFIR</strong><span>Digital forensics &amp; incident response — Autopsy, Volatility, KAPE, Velociraptor</span></div></li>
+            <li><i class="fa-solid fa-envelope-open-text"></i><div><strong>Phishing Analysis</strong><span>Email header &amp; attachment analysis, malicious-mail triage</span></div></li>
+          </ul>
+        </article>
+
+        <!-- DevSecOps -->
+        <article class="path-card">
+          <div class="path-head">
+            <div class="path-icon devsec"><i class="fa-solid fa-infinity"></i></div>
+            <div>
+              <h3>DevSecOps</h3>
+              <span class="path-provider">TryHackMe · Secure SDLC</span>
+            </div>
+            <span class="path-status">In Progress</span>
+          </div>
+          <p class="path-desc">Baking security into the CI/CD pipeline — shifting left with automated testing, securing the build chain, containers and infrastructure as code.</p>
+          <div class="path-progress"><span style="--p:35%"></span></div>
+          <ul class="path-modules">
+            <li><i class="fa-solid fa-code-branch"></i><div><strong>DevSecOps Fundamentals</strong><span>SDLC, DevOps culture, shift-left security</span></div></li>
+            <li><i class="fa-solid fa-code"></i><div><strong>SAST</strong><span>Static Application Security Testing on source code</span></div></li>
+            <li><i class="fa-solid fa-bug"></i><div><strong>DAST</strong><span>Dynamic Application Security Testing on running apps</span></div></li>
+            <li><i class="fa-solid fa-diagram-project"></i><div><strong>CI/CD &amp; Pipeline Security</strong><span>Securing builds, secrets management, dependency &amp; supply-chain risk (SCA)</span></div></li>
+            <li><i class="fa-brands fa-docker"></i><div><strong>Container Security</strong><span>Docker &amp; Kubernetes hardening, image scanning</span></div></li>
+            <li><i class="fa-solid fa-layer-group"></i><div><strong>Infrastructure as Code</strong><span>Auditing IaC (Terraform &amp; co.) for misconfigurations</span></div></li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTF WRITE-UPS -->
+  <section id="ctf" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">05</span>
+        <h2 class="section-title">CTF Write-Ups</h2>
+        <p class="section-sub">Capture-the-flag challenges — solved &amp; documented</p>
+      </header>
+
+      <p class="ctf-note">
+        <i class="fa-solid fa-circle-info"></i>
+        Challenges from EURECOM's System Security lab and CTF practice. Write-ups are
+        <strong>sanitized</strong> — techniques and lessons only, no live flags, hostnames or credentials.
+      </p>
+
+      <div class="ctf-grid">
+
+        <article class="ctf-card">
+          <div class="ctf-top">
+            <span class="ctf-cat"><i class="fa-solid fa-terminal"></i> Linux · pwn</span>
+            <span class="ctf-points">Privilege Escalation</span>
+          </div>
+          <h3>SUID Binary &amp; Relative-Path Hijack</h3>
+          <p>A SUID-root helper executed a program via a <em>relative</em> path (<code>execlp("./vuln", …)</code>) while trusting the current working directory. The bundled overflow was a decoy — an <code>exit(1)</code> made it non-exploitable.</p>
+          <ul class="ctf-steps">
+            <li>Audited the SUID binary and vulnerable source with <code>ls -l</code>, <code>file</code> and code review</li>
+            <li>Identified that execution resolved <code>./vuln</code> from a writable directory</li>
+            <li>Planted a minimal <code>setuid(0)</code> + <code>/bin/sh</code> binary named <code>vuln</code> and ran the helper from there</li>
+            <li>Obtained a <strong>root shell</strong> and read the protected flag</li>
+          </ul>
+          <div class="ctf-tags"><span>SUID</span><span>PATH hijack</span><span>GDB</span><span>C / shellcode</span></div>
+          <p class="ctf-lesson"><strong>Takeaway:</strong> SUID + relative paths + trusted CWD = privilege escalation. Mitigate with absolute paths, dropped privileges and bounded string ops (<code>strncat</code>).</p>
+        </article>
+
+        <article class="ctf-card">
+          <div class="ctf-top">
+            <span class="ctf-cat"><i class="fa-solid fa-server"></i> Kernel · pwn</span>
+            <span class="ctf-points">100 pts</span>
+          </div>
+          <h3>Boot-Token Extraction via QEMU</h3>
+          <p>The flag lived in a root-only file inside a QEMU VM. An init script derived it from the kernel command line, then locked <code>/proc/cmdline</code> — so the secret had to be recovered from <em>outside</em> the guest.</p>
+          <ul class="ctf-steps">
+            <li>Traced <code>/private</code> back to an init script parsing <code>token=</code> from <code>/proc/cmdline</code></li>
+            <li>Realised the flag was a kernel boot parameter passed to QEMU by a SUID launcher</li>
+            <li>On the host, located the QEMU PID and read <code>/proc/&lt;pid&gt;/cmdline</code></li>
+            <li>Recovered the boot token — no kernel exploit required</li>
+          </ul>
+          <div class="ctf-tags"><span>QEMU</span><span>/proc</span><span>boot params</span><span>Linux internals</span></div>
+          <p class="ctf-lesson"><strong>Takeaway:</strong> secrets passed on a process command line are world-readable via <code>/proc</code>; never put credentials in boot params or argv.</p>
+        </article>
+
+        <article class="ctf-card">
+          <div class="ctf-top">
+            <span class="ctf-cat"><i class="fa-solid fa-wifi"></i> Network · forensics</span>
+            <span class="ctf-points">Multi-stage</span>
+          </div>
+          <h3>Port Knocking + PCAP + SHA-256 PoW</h3>
+          <p>A hidden service was gated behind a port-knocking sequence captured in a PCAP, followed by a cryptographic proof-of-work and a synchronized UDP scan to unlock the vault.</p>
+          <ul class="ctf-steps">
+            <li>Analysed the capture in Wireshark; filtered SYNs with <code>tcp.flags.syn==1 &amp;&amp; tcp.flags.ack==0</code></li>
+            <li>Discovered the secret was encoded in the <em>source-port</em> sequence, not the destination</li>
+            <li>Extracted the unique sequence with <code>tshark</code> and replayed the knock with <code>netcat</code></li>
+            <li>Solved a SHA-256 proof-of-work (digest starting with zero bytes), then a timed UDP scan to reveal the flag</li>
+          </ul>
+          <div class="ctf-tags"><span>Wireshark</span><span>tshark</span><span>netcat</span><span>SHA-256 PoW</span><span>Python</span></div>
+          <p class="ctf-lesson"><strong>Takeaway:</strong> the authentication secret lived in packet metadata (source ports) — protocol-level forensics beats surface inspection.</p>
+        </article>
+
+        <article class="ctf-card">
+          <div class="ctf-top">
+            <span class="ctf-cat"><i class="fa-solid fa-database"></i> Web · injection</span>
+            <span class="ctf-points">Web</span>
+          </div>
+          <h3>SQL Injection — "The Safest Bank"</h3>
+          <p>A web challenge exploiting an unsanitized query to bypass authentication and exfiltrate data from the backend database.</p>
+          <ul class="ctf-steps">
+            <li>Probed input fields for injection points and error-based feedback</li>
+            <li>Crafted payloads to bypass login logic and enumerate the schema</li>
+            <li>Extracted the target data and documented the full chain</li>
+          </ul>
+          <div class="ctf-tags"><span>SQLi</span><span>Web security</span><span>Auth bypass</span></div>
+          <p class="ctf-lesson"><strong>Takeaway:</strong> parameterize every query and validate input — string-built SQL is an open door.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">06</span>
+        <h2 class="section-title">Achievements &amp; Recognition</h2>
+        <p class="section-sub">Awards, distinctions, and moments of pride</p>
+      </header>
+
+      <!-- Silenza feature -->
+      <article class="award-feature">
+        <div class="award-badge">
+          <i class="fa-solid fa-trophy"></i>
+          <span>2nd Place</span>
+        </div>
+
+        <div class="award-content">
+          <div class="award-tag">🏆 Entrepreneurship Award · 2025</div>
+          <h3>Silenza — 2nd out of 27 Teams</h3>
+          <h4>18th Edition of Challenge D'Entreprendre</h4>
+          <p class="award-lead">
+            A smart, portable noise-neutralizing device combining <strong>Active Noise
+            Cancellation (ANC)</strong> with <strong>AI</strong> to adapt in real time to
+            surrounding sound environments — designed to protect hearing, improve concentration
+            and support mental well-being in noisy shared spaces.
+          </p>
+
+          <div class="award-details">
+            <div class="detail">
+              <i class="fa-solid fa-users"></i>
+              <div>
+                <h5>Team</h5>
+                <p>Aziz May · Yosr Ezzedine · Ibtihel Zayenne · Nour Ghamgui · Rayen Tahar · Yasmine Gharsallah</p>
+              </div>
+            </div>
+            <div class="detail">
+              <i class="fa-solid fa-lightbulb"></i>
+              <div>
+                <h5>What I Took Away</h5>
+                <p>Intense teamwork under deadline, turning a technical idea into a pitch that jurors from leading companies could believe in.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="award-media">
+            <img src="assets/images/silenza-1.jpg" alt="Silenza — Challenge D'Entreprendre" loading="lazy" />
+            <img src="assets/images/silenza-2.jpg" alt="Silenza team pitching" loading="lazy" />
+            <img src="assets/images/silenza-3.jpg" alt="Silenza award moment" loading="lazy" />
+          </div>
+        </div>
+      </article>
+
+      <!-- Other achievements grid -->
+      <div class="achievements-grid">
+        <div class="achievement">
+          <div class="ach-icon"><i class="fa-solid fa-ranking-star"></i></div>
+          <h4>Top 10% — National Engineering Exams</h4>
+          <p>Ranked <strong>179 out of 1,780</strong> in the national Math-Physics engineering entrance exam.</p>
+          <span class="ach-year">2023</span>
+        </div>
+
+        <div class="achievement">
+          <div class="ach-icon"><i class="fa-solid fa-earth-africa"></i></div>
+          <h4>TOEIC — 915/990</h4>
+          <p>Certified professional English proficiency. Trilingual communicator (AR · FR · EN), plus Spanish (A1).</p>
+          <span class="ach-year">2024</span>
+        </div>
+
+        <div class="achievement">
+          <div class="ach-icon"><i class="fa-solid fa-globe"></i></div>
+          <h4>EURECOM Double Degree</h4>
+          <p>Selected for an international double-degree program in the security of computer systems and communications.</p>
+          <span class="ach-year">2025</span>
+        </div>
+
+        <div class="achievement">
+          <div class="ach-icon"><i class="fa-solid fa-heart"></i></div>
+          <h4>Little Heroes — Founder &amp; Lead</h4>
+          <p>Launched and lead a volunteering initiative supporting children fighting cancer.</p>
+          <span class="ach-year">2024 — Present</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">07</span>
+        <h2 class="section-title">Technical Arsenal</h2>
+        <p class="section-sub">Tools, languages, and platforms I work with</p>
+      </header>
+
+      <div class="skills-grid">
+        <div class="skill-group">
+          <div class="sg-header">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>Security &amp; Blue Team</h3>
+          </div>
+          <ul class="sg-list">
+            <li><span>Wireshark / tshark</span><span class="bar"><span style="--v:85%"></span></span></li>
+            <li><span>SIEM (Splunk / ELK)</span><span class="bar"><span style="--v:65%"></span></span></li>
+            <li><span>MITRE ATT&amp;CK</span><span class="bar"><span style="--v:70%"></span></span></li>
+            <li><span>DFIR / Forensics</span><span class="bar"><span style="--v:65%"></span></span></li>
+            <li><span>Threat Intelligence</span><span class="bar"><span style="--v:65%"></span></span></li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <div class="sg-header">
+            <i class="fa-solid fa-user-secret"></i>
+            <h3>Offensive &amp; CTF</h3>
+          </div>
+          <ul class="sg-list">
+            <li><span>Linux Privilege Escalation</span><span class="bar"><span style="--v:78%"></span></span></li>
+            <li><span>Binary Exploitation (pwn)</span><span class="bar"><span style="--v:70%"></span></span></li>
+            <li><span>Web (SQLi)</span><span class="bar"><span style="--v:72%"></span></span></li>
+            <li><span>Hardware / CPA</span><span class="bar"><span style="--v:80%"></span></span></li>
+            <li><span>GDB / reverse basics</span><span class="bar"><span style="--v:70%"></span></span></li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <div class="sg-header">
+            <i class="fa-solid fa-infinity"></i>
+            <h3>DevSecOps &amp; Cloud</h3>
+          </div>
+          <ul class="sg-list">
+            <li><span>AWS (Cognito/IAM/S3/Lambda)</span><span class="bar"><span style="--v:82%"></span></span></li>
+            <li><span>CI/CD Security (SAST/DAST)</span><span class="bar"><span style="--v:60%"></span></span></li>
+            <li><span>Docker / Containers</span><span class="bar"><span style="--v:65%"></span></span></li>
+            <li><span>Linux</span><span class="bar"><span style="--v:85%"></span></span></li>
+            <li><span>Git</span><span class="bar"><span style="--v:82%"></span></span></li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <div class="sg-header">
+            <i class="fa-solid fa-code"></i>
+            <h3>Programming</h3>
+          </div>
+          <ul class="sg-list">
+            <li><span>Python</span><span class="bar"><span style="--v:90%"></span></span></li>
+            <li><span>C / C++</span><span class="bar"><span style="--v:80%"></span></span></li>
+            <li><span>Bash / Scripting</span><span class="bar"><span style="--v:78%"></span></span></li>
+            <li><span>SQL / SQLite</span><span class="bar"><span style="--v:85%"></span></span></li>
+            <li><span>VHDL</span><span class="bar"><span style="--v:80%"></span></span></li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <div class="sg-header">
+            <i class="fa-solid fa-lock"></i>
+            <h3>Cryptography &amp; Networks</h3>
+          </div>
+          <ul class="sg-list">
+            <li><span>RSA / ECC / DH</span><span class="bar"><span style="--v:80%"></span></span></li>
+            <li><span>PKI · TLS/SSL</span><span class="bar"><span style="--v:78%"></span></span></li>
+            <li><span>Hash Functions</span><span class="bar"><span style="--v:82%"></span></span></li>
+            <li><span>Cisco / CCNA</span><span class="bar"><span style="--v:82%"></span></span></li>
+            <li><span>Network Security</span><span class="bar"><span style="--v:80%"></span></span></li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <div class="sg-header">
+            <i class="fa-solid fa-brain"></i>
+            <h3>AI &amp; Data</h3>
+          </div>
+          <ul class="sg-list">
+            <li><span>PyTorch</span><span class="bar"><span style="--v:80%"></span></span></li>
+            <li><span>scikit-learn</span><span class="bar"><span style="--v:78%"></span></span></li>
+            <li><span>Federated Learning / DP</span><span class="bar"><span style="--v:72%"></span></span></li>
+            <li><span>YOLO / KNN / DBSCAN</span><span class="bar"><span style="--v:80%"></span></span></li>
+            <li><span>NetworkX</span><span class="bar"><span style="--v:75%"></span></span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tools-marquee">
+        <div class="marquee-track">
+          <span>Python</span><span>Wireshark</span><span>Splunk</span><span>ELK</span><span>MITRE ATT&amp;CK</span><span>Linux</span><span>AWS</span><span>Docker</span><span>GDB</span><span>Cisco</span><span>VHDL</span><span>PyTorch</span><span>Git</span><span>Snort</span><span>Volatility</span><span>tshark</span>
+          <span>Python</span><span>Wireshark</span><span>Splunk</span><span>ELK</span><span>MITRE ATT&amp;CK</span><span>Linux</span><span>AWS</span><span>Docker</span><span>GDB</span><span>Cisco</span><span>VHDL</span><span>PyTorch</span><span>Git</span><span>Snort</span><span>Volatility</span><span>tshark</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">08</span>
+        <h2 class="section-title">Certifications</h2>
+        <p class="section-sub">Continuous learning, verified</p>
+      </header>
+
+      <div class="certs-grid">
+        <div class="cert-card is-progress">
+          <div class="cert-top">
+            <i class="fa-solid fa-shield-virus"></i>
+            <span class="cert-date">In Progress</span>
+          </div>
+          <h4>SOC Level 1</h4>
+          <p>TryHackMe — blue-team path: SIEM, traffic analysis, DFIR, threat intel.</p>
+        </div>
+
+        <div class="cert-card is-progress">
+          <div class="cert-top">
+            <i class="fa-solid fa-infinity"></i>
+            <span class="cert-date">In Progress</span>
+          </div>
+          <h4>DevSecOps</h4>
+          <p>TryHackMe — secure CI/CD, SAST/DAST, container &amp; IaC security.</p>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-top">
+            <i class="fa-solid fa-diagram-project"></i>
+            <span class="cert-date">2026</span>
+          </div>
+          <h4>Project Management Fundamentals</h4>
+          <p>EURECOM — 42h, completed with a final grade ≥ 80%.</p>
+          <a class="cert-link" href="assets/certificates/eurecom-project-management.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> View certificate</a>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-top">
+            <i class="fa-solid fa-lock"></i>
+            <span class="cert-date">2024</span>
+          </div>
+          <h4>ISC2 — Security Principles</h4>
+          <p>Foundational information-security principles and concepts.</p>
+          <a class="cert-link" href="assets/certificates/isc2-security-principles.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> View certificate</a>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-top">
+            <i class="fa-solid fa-network-wired"></i>
+            <span class="cert-date">Sep 2024</span>
+          </div>
+          <h4>CCNAv7: Introduction to Networks</h4>
+          <p>Cisco Networking Academy — network fundamentals, protocols &amp; configuration.</p>
+          <a class="cert-link" href="assets/certificates/ccna-intro-networks.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> View certificate</a>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-top">
+            <i class="fa-solid fa-user-secret"></i>
+            <span class="cert-date">Aug 2024</span>
+          </div>
+          <h4>Intro to Cybersecurity Path</h4>
+          <p>TryHackMe — foundational security skills and hands-on labs.</p>
+          <a class="cert-link" href="assets/certificates/tryhackme-intro.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> View certificate</a>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-top">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span class="cert-date">Jul 2024</span>
+          </div>
+          <h4>Introduction to Cybersecurity</h4>
+          <p>Cisco Networking Academy — core cybersecurity concepts.</p>
+          <a class="cert-link" href="assets/certificates/cisco-intro-cybersecurity.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> View certificate</a>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-top">
+            <i class="fa-solid fa-cube"></i>
+            <span class="cert-date">Dec 2024</span>
+          </div>
+          <h4>Hashgraph Developer Course</h4>
+          <p>Distributed ledger technology and Hedera Hashgraph development.</p>
+          <a class="cert-link" href="assets/certificates/hashgraph-developer.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> View certificate</a>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-top">
+            <i class="fa-brands fa-python"></i>
+            <span class="cert-date">2025</span>
+          </div>
+          <h4>Python for Data Science</h4>
+          <p>IBM — Python fundamentals for data analysis and ML workflows.</p>
+          <a class="cert-link" href="assets/certificates/ibm-python-datascience.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> View certificate</a>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-top">
+            <i class="fa-solid fa-database"></i>
+            <span class="cert-date">2022</span>
+          </div>
+          <h4>Python / SQL / SQLite</h4>
+          <p>Programming and database fundamentals.</p>
+          <a class="cert-link" href="assets/certificates/python-sql-sqlite.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> View certificate</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY & VOLUNTEER -->
+  <section id="community" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">09</span>
+        <h2 class="section-title">Community &amp; Impact</h2>
+        <p class="section-sub">Leadership, volunteering, and student communities</p>
+      </header>
+
+      <!-- Little Heroes feature -->
+      <article class="vol-feature">
+        <div class="vol-media">
+          <img src="assets/images/little-heroes-1.jpg" alt="Little Heroes volunteering" loading="lazy" />
+          <div class="vol-gallery">
+            <img src="assets/images/little-heroes-2.jpg" alt="Little Heroes event" loading="lazy" />
+            <img src="assets/images/little-heroes-3.jpg" alt="Little Heroes children" loading="lazy" />
+            <img src="assets/images/little-heroes-4.jpg" alt="Little Heroes team" loading="lazy" />
+          </div>
+        </div>
+        <div class="vol-content">
+          <div class="vol-tag"><i class="fa-solid fa-heart"></i> Volunteering · Founder &amp; Lead</div>
+          <h3>Little Heroes</h3>
+          <p class="vol-lead">A volunteering initiative I launched to bring joy, support and hope to children fighting cancer — through solidarity events, awareness campaigns and moments of care for the kids and their families.</p>
+          <div class="star-grid">
+            <div class="star"><span class="star-k">Situation</span><p>Children undergoing cancer treatment, and their families, face isolation and heavy emotional strain.</p></div>
+            <div class="star"><span class="star-k">Task</span><p>Create a sustained, caring initiative rather than a one-off charity event.</p></div>
+            <div class="star"><span class="star-k">Action</span><p>Founded and lead <strong>Little Heroes</strong>: recruiting volunteers, organizing visits and activities, and running awareness on social media.</p></div>
+            <div class="star"><span class="star-k">Result</span><p>An active community presence bringing recurring joy to the children — demonstrating initiative, project ownership and empathy.</p></div>
+          </div>
+          <a class="btn btn-ghost vol-link" href="https://www.facebook.com/profile.php?id=61556520117863" target="_blank" rel="noopener">
+            <i class="fa-brands fa-facebook"></i><span>Visit the Little Heroes page</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- Clubs with STAR -->
+      <div class="clubs-grid">
+
+        <article class="club-card">
+          <div class="club-head"><i class="fa-solid fa-shield-halved"></i><h4>Cybersecurity Club — SUP'COM</h4><span class="club-year">2023 — 2024</span></div>
+          <p class="club-role">Active Member · received a Letter of Appreciation</p>
+          <ul class="club-star">
+            <li><b>S</b> A student club growing security awareness on campus.</li>
+            <li><b>T</b> Contribute to workshops and hands-on security activities.</li>
+            <li><b>A</b> Took part in sessions and challenges, supporting members' learning.</li>
+            <li><b>R</b> Recognized with a formal letter of appreciation for my contribution.</li>
+          </ul>
+          <a class="cert-link" href="assets/certificates/cybersecurity-club-appreciation.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> Letter of appreciation</a>
+        </article>
+
+        <article class="club-card">
+          <div class="club-head"><i class="fa-solid fa-robot"></i><h4>IndabaX Tunisia 2024</h4><span class="club-year">2024</span></div>
+          <p class="club-role">Program &amp; Organizing Committee</p>
+          <ul class="club-star">
+            <li><b>S</b> IndabaX is the local chapter of Africa's largest AI community gathering.</li>
+            <li><b>T</b> Help organize a multi-track event for students and researchers.</li>
+            <li><b>A</b> Coordinated program logistics, sessions and attendee experience on the committee.</li>
+            <li><b>R</b> Delivered a smooth event connecting the Tunisian AI community.</li>
+          </ul>
+          <a class="cert-link" href="assets/certificates/indabax-committee.jpg" target="_blank" rel="noopener"><i class="fa-solid fa-image"></i> Committee certificate</a>
+        </article>
+
+        <article class="club-card">
+          <div class="club-head"><i class="fa-brands fa-google"></i><h4>Google Developer Student Clubs</h4><span class="club-year">2023 — 2024</span></div>
+          <p class="club-role">Outstanding Member Contribution (SUP'COM)</p>
+          <ul class="club-star">
+            <li><b>S</b> GDSC runs peer-learning around Google &amp; developer technologies.</li>
+            <li><b>T</b> Contribute to workshops and community activities across the year.</li>
+            <li><b>A</b> Actively collaborated on sessions and events with the chapter.</li>
+            <li><b>R</b> Awarded a Certificate of Appreciation for outstanding contribution.</li>
+          </ul>
+          <a class="cert-link" href="assets/certificates/gdsc.jpeg" target="_blank" rel="noopener"><i class="fa-solid fa-image"></i> Certificate</a>
+        </article>
+
+        <article class="club-card">
+          <div class="club-head"><i class="fa-solid fa-venus"></i><h4>Wiempower 1.0</h4><span class="club-year">2024</span></div>
+          <p class="club-role">Program Committee — Women in STEM</p>
+          <ul class="club-star">
+            <li><b>S</b> An initiative empowering women in STEM fields.</li>
+            <li><b>T</b> Shape and run the event's program.</li>
+            <li><b>A</b> Organized sessions and speakers as a committee member.</li>
+            <li><b>R</b> Contributed to an inspiring, well-run edition.</li>
+          </ul>
+        </article>
+
+        <article class="club-card">
+          <div class="club-head"><i class="fa-solid fa-award"></i><h4>IEEE TSYP 11</h4><span class="club-year">2023</span></div>
+          <p class="club-role">Participant — Tunisian Students &amp; Young Professionals Congress</p>
+          <ul class="club-star">
+            <li><b>S</b> IEEE's flagship national congress for students &amp; young professionals.</li>
+            <li><b>T</b> Engage with technical challenges and IEEE community activities.</li>
+            <li><b>A</b> Took part in the congress program and activities.</li>
+            <li><b>R</b> Broadened technical network and community involvement.</li>
+          </ul>
+          <a class="cert-link" href="assets/certificates/tsyp11.jpg" target="_blank" rel="noopener"><i class="fa-solid fa-image"></i> Certificate</a>
+        </article>
+
+        <article class="club-card">
+          <div class="club-head"><i class="fa-solid fa-pen-ruler"></i><h4>Annual SUP'COM Forum</h4><span class="club-year">2023</span></div>
+          <p class="club-role">Design Committee</p>
+          <ul class="club-star">
+            <li><b>S</b> The forum connects students with companies each year.</li>
+            <li><b>T</b> Produce the event's visual identity and materials.</li>
+            <li><b>A</b> Designed communication materials on the design committee.</li>
+            <li><b>R</b> A consistent, professional visual identity for the event.</li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-num">10</span>
+        <h2 class="section-title">Let's Work Together</h2>
+        <p class="section-sub">Open to end-of-studies internships, SOC / DevSecOps roles, and research collabs</p>
+      </header>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Get in touch</h3>
+          <p>I'm seeking a <strong>5–6 month end-of-studies internship starting February 2027</strong> in SOC operations, incident response, DevSecOps or cloud/network security. If you have an opportunity — or just want to talk security — my inbox is always open.</p>
+
+          <ul class="contact-list">
+            <li>
+              <a href="mailto:yasmine.gharsallah@eurecom.fr">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                  <span class="c-label">Email</span>
+                  <span class="c-value">yasmine.gharsallah@eurecom.fr</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+33754863850">
+                <i class="fa-solid fa-phone"></i>
+                <div>
+                  <span class="c-label">Phone (France)</span>
+                  <span class="c-value">+33 7 54 86 38 50</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/yasmine-gharsallah-07a3082a0/" target="_blank" rel="noopener">
+                <i class="fa-brands fa-linkedin-in"></i>
+                <div>
+                  <span class="c-label">LinkedIn</span>
+                  <span class="c-value">yasmine-gharsallah</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener">
+                <i class="fa-brands fa-github"></i>
+                <div>
+                  <span class="c-label">GitHub</span>
+                  <span class="c-value">Yasmine-Gharsallah</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <div class="c-static">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                  <span class="c-label">Location</span>
+                  <span class="c-value">Antibes, France</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <form class="contact-form" id="contactForm" onsubmit="return handleContact(event)">
+          <div class="form-head">
+            <span>New message</span>
+            <span class="form-status">● Online</span>
+          </div>
+          <label>
+            <span>Your name</span>
+            <input type="text" name="name" required placeholder="Jane Recruiter" />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" required placeholder="jane@company.com" />
+          </label>
+          <label>
+            <span>Subject</span>
+            <input type="text" name="subject" required placeholder="Internship opportunity — Feb 2027" />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="5" required placeholder="Tell me about the role, team, and what you're looking for…"></textarea>
+          </label>
+          <button type="submit" class="btn btn-primary">
+            <span>Send message</span>
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+          <p class="form-note" id="formNote"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="f-left">
+        <span class="f-logo">&lt;YG/&gt;</span>
+        <p>Designed &amp; coded with care by Yasmine Gharsallah.</p>
+      </div>
+      <div class="f-right">
+        <a href="https://www.linkedin.com/in/yasmine-gharsallah-07a3082a0/" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://github.com/Yasmine-Gharsallah" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:yasmine.gharsallah@eurecom.fr"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="f-bottom">© <span id="year"></span> Yasmine Gharsallah. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <a href="#home" class="back-top" id="backTop" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>

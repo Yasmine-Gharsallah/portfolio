@@ -1,0 +1,8 @@
+# Private / internal — do NOT publish
+Internship_SophiaAntipolis_2026.md
+.claude/
+
+# OS / editor cruft
+Thumbs.db
+Desktop.ini
+.DS_Store
